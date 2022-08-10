@@ -60,3 +60,9 @@ SELECT * FROM publisher;
 --     REFERENCES publisher(publisher_id)
 
 
+--* Один к одному
+--* Например у человека может быть олин пасспорт
+--* Чтобы поддержать связь 1 к 1 можно добавить UNIQUE чтобы гарантировать отсутствие дубликатов
+CREATE TABLE person(
+    person_id 
+)
