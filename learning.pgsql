@@ -4,6 +4,7 @@ CREATE DATABASE dev;
 -- DROP DATABASE dev WITH (FORCE);
 
 --* Создание и удаление таблиц в базе данных
+DROP TABLE IF EXISTS EMP;
 CREATE TABLE EMP(
     emp_id      INTEGER,
     emp_name    varchar(50),
@@ -25,6 +26,9 @@ SELECT * FROM EMP;
 
 --* Один ко многим
 --* У одного издательства может быть несколько изданных книг
+DROP TABLE IF EXISTS publisher;
+DROP TABLE IF EXISTS book;
+
 CREATE TABLE publisher(
     publisher_id    integer         PRIMARY KEY,
     org_name        varchar(128)    NOT NULL,
@@ -66,6 +70,9 @@ SELECT * FROM publisher;
 --* Один к одному
 --* Например у человека может быть олин паспорт
 --* Чтобы поддержать связь 1 к 1 можно добавить UNIQUE чтобы гарантировать отсутствие дубликатов
+DROP TABLE IF EXISTS person;
+DROP TABLE IF EXISTS passport;
+
 CREATE TABLE person(
     person_id   int         PRIMARY KEY,
     first_name  varchar(30) NOT NULL,
@@ -93,3 +100,51 @@ VALUES  (1, 123456, 1, 'Winterfell'),
 --* будет ошибка потому что fk_passport_person -> UNIQUE
 -- INSERT INTO passport
 -- VALUES  (4, 901234, 1, 'King''s Landing');
+
+
+--* Многие ко многим
+--* Эта связь делается с помощью дополнительной таблицы
+--* В этой таблице используется составной ключ (composite key)
+DROP TABLE IF EXISTS doc_author;
+DROP TABLE IF EXISTS doc;
+DROP TABLE IF EXISTS author;
+
+CREATE TABLE doc(
+    doc_id      int     PRIMARY KEY,
+    title       text    NOT NULL,
+    isbn        text    NOT NULL
+);
+
+CREATE TABLE author(
+    author_id   int     PRIMARY KEY,
+    full_name   text    NOT NULL,
+    rating      real
+);
+
+CREATE TABLE doc_author(
+    doc_id      int REFERENCES doc(doc_id),
+    author_id   int REFERENCES author(author_id),
+
+    CONSTRAINT doc_author_pkey PRIMARY KEY (doc_id, author_id)     --* composite key
+);
+
+INSERT INTO doc
+VALUES  (1, 'Book for Dummies', '123456'),
+        (2, 'Book for Smart Guys', '7890123'),
+        (3, 'Book for Happy People', '4567890'),
+        (4, 'Book for Unhappy People', '1234567');
+
+INSERT INTO author
+VALUES  (1, 'Bob', 4.5),
+        (2, 'Alice', 4.0),
+        (3, 'John', 4.7);
+
+INSERT INTO doc_author
+VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(3, 2),
+(4, 1),
+(4, 2),
+(4, 3);
