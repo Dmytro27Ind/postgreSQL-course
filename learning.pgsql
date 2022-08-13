@@ -39,7 +39,9 @@ CREATE TABLE book(
     book_id         integer         PRIMARY KEY,
     title           text            NOT NULL,
     isbn            varchar(32)     NOT NULL,
-    fk_publisher_id integer         REFERENCES publisher(publisher_id) NOT NULL
+    fk_publisher_id integer         REFERENCES publisher(publisher_id) NOT NULL  --* А можно как в базе данных northwind
+                                                        --* сначала создать все таблицы, а только потом прописывать
+                                                        --* REFERENCES и PRIMARY KEY через ALTER TABLE database_name ADD CONSTRAINT...
 );
 
 INSERT INTO book
