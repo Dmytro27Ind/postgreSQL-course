@@ -117,4 +117,56 @@ SELECT COUNT(*)
 FROM orders
 WHERE freight BETWEEN 20 AND 40;            --* тоже самое что и    freight >= 20 AND freight <= 40
 
+SELECT *
+FROM orders
+WHERE order_date BETWEEN '1998-03-30' AND '1998-04-03';
+
 --* ------------- END -------------- "Использования BETWEEN" ---------------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования IN и NOT"
+--* -------------------------------------------------------------------------------------
+
+SELECT *
+FROM customers
+WHERE country IN ('Mexico', 'Germany', 'USA', 'Canada');        --* country = 'Mexico' OR country = 'Germany'
+                                                                --* OR country = 'USA' OR country = 'Canada'
+
+SELECT *
+FROM products
+WHERE category_id IN (1, 3, 5, 7);
+
+SELECT *
+FROM customers
+WHERE country NOT IN ('Mexico', 'Germany', 'USA', 'Canada');        --* country != 'Mexico' AND country != 'Germany'
+                                                                    --* AND country != 'USA' AND country != 'Canada'
+
+--* ------------- END -------------- "Использования IN и NOT" ---------------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования ORDER BY, ASC, DESC"
+--* -------------------------------------------------------------------------------------
+
+SELECT DISTINCT country
+FROM customers
+ORDER BY country;
+
+SELECT DISTINCT country
+FROM customers
+ORDER BY country ASC;       --* ASC - по возрастанию (тоже что и прошлый запрос)
+
+SELECT DISTINCT country
+FROM customers
+ORDER BY country DESC;       --* DESC - по убыванию
+
+SELECT DISTINCT country, city
+FROM customers
+ORDER BY country DESC, city DESC;
+
+SELECT DISTINCT country, city
+FROM customers
+ORDER BY country DESC, city ASC;
+
+--* ------------- END -------------- "Использования ORDER BY" ---------------------------
