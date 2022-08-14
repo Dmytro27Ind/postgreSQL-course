@@ -222,3 +222,82 @@ FROM employees
 WHERE last_name LIKE '_uch%';
 
 --* -------- END --------- "Использования LIKE     (Pattern Matching)" ------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования LIMIT"
+--* -------------------------------------------------------------------------------------
+
+SELECT product_name, unit_price
+FROM products
+LIMIT 10;
+
+SELECT product_name, unit_price
+FROM products
+WHERE discontinued != 1
+ORDER BY unit_price DESC
+LIMIT 10;
+
+--* --------------- END ----------------- "Использования LIMIT" -------------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования NULL, IS NULL, IS NOT NULL"
+--* -------------------------------------------------------------------------------------
+
+SELECT ship_city, ship_region, ship_country
+FROM orders
+WHERE ship_region IS NULL;
+
+SELECT ship_city, ship_region, ship_country
+FROM orders
+WHERE ship_region IS NOT NULL;
+
+--* -------- END ---------- "Использования NULL, IS NULL, IS NOT NULL" ------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования GROUP BY"
+--* -------------------------------------------------------------------------------------
+
+SELECT *
+FROM orders
+WHERE freight > 50;
+
+SELECT ship_country
+FROM orders
+WHERE freight > 50;
+
+SELECT COUNT(*)
+FROM orders
+WHERE freight > 50;
+
+
+--* ERROR without GROUP BY
+-- SELECT ship_country, COUNT(*)
+-- FROM orders
+-- WHERE freight > 50;
+
+SELECT ship_country, COUNT(*)
+FROM orders
+WHERE freight > 50
+GROUP BY ship_country
+ORDER BY COUNT(*) DESC;
+
+SELECT ship_country, COUNT(*) AS amount, COUNT(DISTINCT ship_city)
+FROM orders
+WHERE freight > 50
+GROUP BY ship_country
+ORDER BY amount ASC;
+
+SELECT ship_country, ship_city
+FROM orders
+WHERE ship_country = 'Italy' AND freight > 50;
+
+SELECT category_id, SUM(units_in_stock)
+FROM products
+GROUP BY category_id
+ORDER BY SUM(units_in_stock) DESC
+LIMIT 5;
+
+--* -------------- END ---------------- "Использования GROUP BY" ------------------------
