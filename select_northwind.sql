@@ -170,3 +170,55 @@ FROM customers
 ORDER BY country DESC, city ASC;
 
 --* ------------- END -------------- "Использования ORDER BY" ---------------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования MIN, MAX, AVG, SUM"
+--* -------------------------------------------------------------------------------------
+
+SELECT ship_city, order_date
+FROM orders
+WHERE ship_city = 'London'
+ORDER BY order_date;
+
+SELECT MIN(order_date)
+FROM orders
+WHERE ship_city = 'London';
+
+SELECT MAX(order_date)
+FROM orders
+WHERE ship_city = 'London';
+
+SELECT AVG(unit_price)
+FROM products
+WHERE discontinued != 1;
+
+SELECT SUM(units_in_stock)
+FROM products
+WHERE discontinued != 1;
+
+--* ----------- END ------------ "Использования MIN, MAX, AVG, SUM" ---------------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования LIKE     (Pattern Matching)"
+--* % - placeholder
+--* -------------------------------------------------------------------------------------
+
+SELECT last_name, first_name
+FROM employees
+WHERE first_name LIKE '%n';
+
+SELECT last_name, first_name
+FROM employees
+WHERE last_name LIKE 'B%';
+
+SELECT last_name, first_name
+FROM employees
+WHERE last_name LIKE 'Buch%';
+
+SELECT last_name, first_name
+FROM employees
+WHERE last_name LIKE '_uch%';
+
+--* -------- END --------- "Использования LIKE     (Pattern Matching)" ------------------
