@@ -257,7 +257,7 @@ WHERE ship_region IS NOT NULL;
 
 
 --* -------------------------------------------------------------------------------------
---* "Использования GROUP BY"
+--* "Использования GROUP BY, HAVING"
 --* -------------------------------------------------------------------------------------
 
 SELECT *
@@ -300,4 +300,75 @@ GROUP BY category_id
 ORDER BY SUM(units_in_stock) DESC
 LIMIT 5;
 
---* -------------- END ---------------- "Использования GROUP BY" ------------------------
+SELECT category_id, SUM(unit_price * units_in_stock)
+FROM products
+WHERE discontinued != 1
+GROUP BY category_id;
+
+SELECT category_id, SUM(unit_price * units_in_stock)
+FROM products
+WHERE discontinued != 1
+GROUP BY category_id
+HAVING SUM(unit_price * units_in_stock) > 5000          --* post filter as WHERE but for GROUP BY
+ORDER BY SUM(unit_price * units_in_stock);
+
+--* ERORR
+--* aggregate functions are not allowed in WHERE
+-- SELECT category_id, SUM(unit_price * units_in_stock)
+-- FROM products
+-- WHERE discontinued != 1 AND SUM(unit_price * units_in_stock) > 5000
+-- GROUP BY category_id
+-- ORDER BY SUM(unit_price * units_in_stock);
+
+--* -------------- END ---------------- "Использования GROUP BY, HAVING" ----------------
+
+
+--* -------------------------------------------------------------------------------------
+--* "Использования UNION, UNION ALL, INTERSECT, EXCEPT"
+--* -------------------------------------------------------------------------------------
+
+SELECT country
+FROM customers;
+
+SELECT country
+FROM employees;
+
+
+--* watch this "./union_union-all_intersect_except.png"
+SELECT country
+FROM customers
+UNION                   --* Выводит уникальные значения стран (без повторений) сразу сдвух таблиц
+SELECT country
+FROM employees;
+
+SELECT country
+FROM customers
+UNION ALL               --* Выводит все значения стран (с повторениями) сразу сдвух таблиц
+SELECT country
+FROM employees;
+
+SELECT country
+FROM customers
+UNION                   --* Выводит уникальные значения стран (без повторений) сразу сдвух таблиц
+SELECT country
+FROM suppliers;
+
+SELECT country
+FROM customers
+INTERSECT               --* Выводит только старны (без повторений) которые сразу в двух таблицах
+SELECT country
+FROM suppliers;
+
+SELECT country
+FROM customers
+EXCEPT               --* Выводит только старны (без повторений) которые только в первой таблице
+SELECT country
+FROM suppliers;
+
+SELECT country
+FROM customers
+EXCEPT ALL           --* Выводит старны (c повторений) столько раз какая разница между двумя таблицами. (10 USA - 4 USA = 6 USA)
+SELECT country
+FROM suppliers;
+
+--* --------- END ---------- "Использования UNION, UNION ALL, INTERSECT, EXCEPT"---------
