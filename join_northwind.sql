@@ -71,3 +71,18 @@ SELECT company_name, order_id
 FROM orders
 RIGHT JOIN customers ON orders.customer_id = customers.customer_id
 WHERE order_id IS NULL;
+
+
+
+--* ---------------------------------------------------------------------
+--* USING, NATURAL JOIN
+--* ---------------------------------------------------------------------
+
+SELECT order_date, product_name, ship_country, products.unit_price, quantity, discount
+FROM orders
+JOIN order_details USING(order_id)      --* ON orders.order_id = order_details.order_id
+JOIN products USING(product_id);        --* ON order_details.product_id = products.product_id;
+
+SELECT order_id, customer_id, first_name, last_name, title
+FROM orders
+NATURAL JOIN employees;             --* неявно указываются столбики для связи. Поэтому лучше НЕ ИСПОЛЬЗОВАТЬ
