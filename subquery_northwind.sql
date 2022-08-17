@@ -59,3 +59,81 @@ FROM customers
 WHERE NOT EXISTS (  SELECT customer_id FROM orders
                 WHERE customer_id = customers.customer_id
                 AND order_date BETWEEN '1995-02-01' AND '1995-02-15');
+
+SELECT company_name, contact_name
+FROM customers
+WHERE EXISTS (  SELECT customer_id FROM orders
+                WHERE customer_id = customers.customer_id
+                AND order_date BETWEEN '1997-06-01' AND '1997-06-04');
+
+SELECT company_name, contact_name
+FROM customers
+JOIN orders USING(customer_id)
+WHERE order_date BETWEEN '1997-06-01' AND '1997-06-04';
+
+
+--* ---------------------------------------------------------------------
+--* ANY, ALL
+--* ---------------------------------------------------------------------
+
+SELECT company_name, SUM(quantity) as quantity
+FROM customers
+JOIN orders USING(customer_id)
+JOIN order_details USING(order_id)
+WHERE quantity > 40
+GROUP BY company_name
+ORDER BY quantity;
+
+SELECT DISTINCT company_name
+FROM customers
+JOIN orders USING(customer_id)
+JOIN order_details USING(order_id)
+WHERE quantity > 40;
+
+SELECT customer_id
+FROM orders
+JOIN order_details USING(order_id)
+WHERE quantity > 40;
+
+SELECT DISTINCT company_name
+FROM customers
+WHERE customer_id IN (  SELECT customer_id
+                        FROM orders
+                        JOIN order_details USING(order_id)
+                        WHERE quantity > 40);
+
+SELECT DISTINCT company_name
+FROM customers
+WHERE customer_id = ANY(
+    SELECT customer_id
+    FROM orders
+    JOIN order_details USING(order_id)
+    WHERE quantity > 40
+);
+
+SELECT AVG(quantity)
+FROM order_details;
+
+SELECT product_name, quantity
+FROM products
+JOIN order_details USING(product_id)
+WHERE quantity > (
+    SELECT AVG(quantity)
+    FROM order_details
+)
+ORDER BY quantity;
+
+SELECT AVG(quantity) AS quantity
+FROM order_details
+GROUP BY product_id
+ORDER BY quantity DESC;
+
+SELECT product_name, quantity
+FROM products
+JOIN order_details USING(product_id)
+WHERE quantity > ALL(
+    SELECT AVG(quantity) AS quantity
+    FROM order_details
+    GROUP BY product_id
+)
+ORDER BY quantity;
