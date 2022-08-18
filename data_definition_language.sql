@@ -119,3 +119,42 @@ FROM information_schema.key_column_usage
 WHERE table_name = 'chair'
     AND table_schema = 'public'
     AND column_name = 'chair_id';
+
+
+
+DROP TABLE publisher;
+DROP TABLE book;
+CREATE TABLE publisher
+(
+    publisher_id int,
+    publisher_name VARCHAR(128) NOT NULL,
+    address TEXT,
+
+    CONSTRAINT PK_publisher_publisher_id PRIMARY KEY(publisher_id)
+);
+
+CREATE TABLE book
+(
+    book_id int,
+    title text NOT NULL,
+    isbn VARCHAR(32) NOT NULL,
+    publisher_id int,
+
+    CONSTRAINT PK_book_book_id PRIMARY KEY(book_id)
+);
+
+ALTER TABLE book        --* add constraint
+ADD CONSTRAINT FK_books_publisher FOREIGN KEY(publisher_id) REFERENCES publisher(publisher_id);
+
+INSERT INTO book
+VALUES  (1, 'The Diary of a Young Girl', '012457329404', 1),
+        (2, 'Pride and Prejudice', '97346092345', 1),
+        (3, 'To Kill a Mockingbird', '012498710445', 2),
+        (4, 'The Book of Gutsy Women', '190947356022', 2),
+        (5, 'War and Peace', '1973094767234', 2);
+
+INSERT INTO publisher
+VALUES  (1, 'Everyman''s Libary', 'NY'),
+        (2, 'Oxford University Press', 'NY'),
+        (3, 'Grand Central Publishing', 'Washington'),
+        (4, 'Simon & Schuster', 'Chicago');
