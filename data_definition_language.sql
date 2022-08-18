@@ -158,3 +158,13 @@ VALUES  (1, 'Everyman''s Libary', 'NY'),
         (2, 'Oxford University Press', 'NY'),
         (3, 'Grand Central Publishing', 'Washington'),
         (4, 'Simon & Schuster', 'Chicago');
+
+
+--* add column with constraint (CHECK)
+ALTER TABLE book
+ADD COLUMN price DECIMAL CONSTRAINT CHK_book_price CHECK (price >= 0);
+
+INSERT INTO book
+VALUES  (6, 'The Diary 6', '012666629404', 1, 10);
+
+SELECT * FROM book;
