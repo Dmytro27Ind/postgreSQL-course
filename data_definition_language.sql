@@ -168,3 +168,31 @@ INSERT INTO book
 VALUES  (6, 'The Diary 6', '012666629404', 1, 10);
 
 SELECT * FROM book;
+
+
+--* add CHECK and DEFAULT value for COLUMN
+CREATE TABLE customer
+(
+    customer_id SERIAL,
+    full_name TEXT,
+    status CHAR DEFAULT 'r',
+
+    CONSTRAINT PK_customer_customer_id PRIMARY KEY(customer_id),
+    CONSTRAINT CHK_customer_status CHECK (status = 'r' OR status = 'p')
+);
+
+INSERT INTO customer (full_name)
+VALUES
+('name5');
+
+INSERT INTO customer (full_name, status)
+VALUES
+('name3', 'p');
+
+SELECT * FROM customer;
+
+ALTER TABLE customer
+ALTER COLUMN status DROP DEFAULT;
+
+ALTER TABLE customer
+ALTER COLUMN status SET DEFAULT 'r';
