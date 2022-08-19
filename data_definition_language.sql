@@ -196,3 +196,66 @@ ALTER COLUMN status DROP DEFAULT;
 
 ALTER TABLE customer
 ALTER COLUMN status SET DEFAULT 'r';
+
+
+
+--* ---------------------------------------------------------------------
+--* Использования UPDATE
+--* ---------------------------------------------------------------------
+
+SELECT * FROM author;
+
+UPDATE author
+SET full_name = 'Elias', rating = 5
+WHERE author_id = 1;
+
+--* --------- END ---------- "Использования UPDATE"----------------------
+
+
+--* ---------------------------------------------------------------------
+--* Использования DELETE, TRUNCATE
+--* ---------------------------------------------------------------------
+
+DROP TABLE doc_author;
+SELECT * FROM author;
+
+DELETE FROM author
+WHERE author_id = 2;
+
+DELETE FROM author;     --* delete ALL
+
+TRUNCATE TABLE author;      --* delete ALL (without log)
+
+--* --------- END ---------- "Использования DELETE, TRUNCATE"----------------------
+
+
+--* ---------------------------------------------------------------------
+--* Использования RETURNING (dont work in VS code plugin. Use pgAdmin !!!)
+--* ---------------------------------------------------------------------
+
+DROP TABLE book;
+
+CREATE TABLE book
+(
+	book_id serial,
+	title text NOT NULL,
+	isbn varchar(32) NOT NULL,
+	publisher_id int NOT NULL,
+
+	CONSTRAINT PK_book_book_id PRIMARY KEY(book_id)
+);
+
+INSERT INTO book(title, isbn, publisher_id)
+VALUES ('title', 'isbn', 3)
+RETURNING *;
+
+UPDATE author
+SET full_name = 'Walter', rating = 5
+WHERE author_id = 1
+RETURNING author_id;
+
+DELETE FROM author
+WHERE rating = 5
+RETURNING *;
+
+--* --------- END ---------- "Использования RETURNING"----------------------
